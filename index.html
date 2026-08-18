@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ذكرياتنا 💖</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+    body { background: linear-gradient(135deg, #ffe6e6, #ffb3c1); color: #333; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+
+    /* شاشة القفل */
+    #lock-screen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      z-index: 999; text-align: center; padding: 20px;
+    }
+    .lock-box { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 350px; width: 100%; }
+    .lock-box h2 { color: #ff4d6d; margin-bottom: 10px; font-size: 22px; }
+    .lock-box p { font-size: 13px; color: #777; margin-bottom: 15px; }
+    .lock-box input { width: 100%; padding: 12px; font-size: 16px; text-align: center; border: 2px solid #ffccd5; border-radius: 10px; outline: none; margin-bottom: 15px; }
+    .lock-box button { width: 100%; padding: 12px; background: #ff4d6d; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    .lock-box button:hover { background: #c9184a; }
+    #error-msg { color: #d90429; font-size: 13px; margin-top: 10px; display: none; }
+
+    /* المحتوى الرئيسي */
+    #main-content { display: none; width: 100%; max-width: 500px; padding: 20px; text-align: center; }
+    header h1 { color: #c9184a; font-size: 26px; margin-bottom: 5px; }
+    header p { color: #555; margin-bottom: 15px; font-size: 14px; }
+
+    /* كارت الرسالة الافتتاحية */
+    .greeting-card {
+      background: linear-gradient(135deg, #ffffff, #fff0f3);
+      border: 2px solid #ffccd5;
+      padding: 20px;
+      border-radius: 18px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(255, 77, 109, 0.15);
+      position: relative;
+    }
+    .greeting-card p {
+      font-size: 16px;
+      color: #c9184a;
+      font-weight: 700;
+      line-height: 1.8;
+    }
+
+    /* مشغل الصوت */
+    .music-player { background: white; padding: 15px; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+    audio { width: 100%; outline: none; height: 40px; }
+
+    /* بطاقات الذكريات */
+    .timeline { position: relative; margin-top: 10px; }
+    .card { background: white; padding: 18px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: right; }
+    .card img { width: 100%; border-radius: 12px; margin-bottom: 12px; object-fit: cover; max-height: 380px; }
+    .card .date { font-size: 13px; color: #ff4d6d; font-weight: bold; margin-bottom: 5px; }
+    .card h3 { font-size: 18px; margin-bottom: 8px; color: #2b2b2b; }
+    .card p { font-size: 14px; color: #555; line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+  <!-- شاشة كلمة السر -->
+  <div id="lock-screen">
+    <div class="lock-box">
+      <h2>🔐 عالم ذكرياتنا</h2>
+      <p>اكتب الباسورد الخاص عشان تفتح الصفحة 💖</p>
+      <input type="password" id="passInput" placeholder="أدخل كلمة السر">
+      <button onclick="unlock()">فتح الموقع</button>
+      <p id="error-msg">كلمة السر غير صحيحة، حاول تاني! ❌</p>
+    </div>
+  </div>
+
+  <!-- محتوى الموقع -->
+  <div id="main-content">
+    <header>
+      <h1>أجمل ذكرياتنا سوا 💖</h1>
+      <p>كل لحظة حلوة عشناها مع بعض</p>
+    </header>
+
+    <!-- رسالة المعايدة الخاصة -->
+    <div class="greeting-card">
+      <p>كل سنة وأنتِ طيبة يا بسبوستي ❤️ كل سنة وأنتِ طيبة يا نور عيوني، والسنة الجاية نبقى أقرب لبعض والسنين الجاية كلها مع بعض يا روح قلبي.. ربنا يخليكي ليا وما يحرمني منك أبداً 💖✨</p>
+    </div>
+
+    <!-- مشغل الأغنية -->
+    <div class="music-player">
+      <p style="font-size: 14px; font-weight: bold; margin-bottom: 8px; color: #ff4d6d;">🎵 ده اللي وانا معاه</p>
+      <audio id="bgMusic" controls loop>
+        <source src="song.mp3" type="audio/mpeg">
+        <source src="song.m4a" type="audio/mp4">
+        متصفحك لا يدعم تشغيل الصوت.
+      </audio>
+    </div>
+
+    <!-- قائمة الذكريات -->
+    <div class="timeline">
+
+      <!-- الذكرى الأولى -->
+      <div class="card">
+        <div class="date">يناير ٢٠٢٢ (يوم الأربعاء)</div>
+        <h3>أول مرة اتكلمنا فيها 💬✨</h3>
+        <p>اليوم ده كان بداية كل حاجة حلوة في حياتنا، ومن وقتها وكل يوم بيعدي وأنتِ أقرب حاجة لقلبي.</p>
+      </div>
+
+      <!-- الذكرى الثانية -->
+      <div class="card">
+        <img src="1.jpg" alt="أول خروجة سوا">
+        <div class="date">٢٣ أكتوبر ٢٠٢٤</div>
+        <h3>أول خروجة سوا ☕❤️</h3>
+        <p>أول مرة نتجمع وننسى الوقت مع بعض، الذكرى دي بالذات ليها مكانة خاصة جداً في قلبي.</p>
+      </div>
+
+      <!-- الذكرى الثالثة -->
+      <div class="card">
+        <img src="2.jpg" alt="تاني خروجة سوا">
+        <div class="date">١١ نوفمبر ٢٠٢٤</div>
+        <h3>تاني خروجة لينا 😂❤️</h3>
+        <p>يوم كله ضحك وفرحة من القلب، وكل خروجة معاكي بتأكدلي قد إيه الوقت جنبِك بيبقى أحلى بكثير.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const CORRECT_PASSWORD = "2006-18-8"; 
+
+    function unlock() {
+      const input = document.getElementById('passInput').value;
+      const errorMsg = document.getElementById('error-msg');
+      const lockScreen = document.getElementById('lock-screen');
+      const mainContent = document.getElementById('main-content');
+      const audio = document.getElementById('bgMusic');
+
+      if (input === CORRECT_PASSWORD) {
+        lockScreen.style.display = 'none';
+        mainContent.style.display = 'block';
+        audio.play().catch(() => {});
+      } else {
+        errorMsg.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
